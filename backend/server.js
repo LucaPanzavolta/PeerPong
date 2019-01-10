@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const socket = require('socket.io');
 const path = require('path');
-const { addSocketToRoom, removeSocketsfromRoom } = require('./redis-controller');
-const { log } = require('./helpers');
+/* const { addSocketToRoom, removeSocketsfromRoom } = require('./redis-controller');
+ */const { log } = require('./helpers');
 const rooms = {};
 
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -12,7 +12,7 @@ app.get('/hello', (req, res) => res.send('hello'))
 const server = app.listen(4000, function () {
   console.log('listening for requests on port 4000');
 });
-const io = socket(server);
+/* const io = socket(server);
 
 io.on('connection', (socket) => {
   let connectedToRoom = null;
@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     log('socket disconnected', socket.id);
     log('active connnections', Object.keys(io.sockets.sockets));
   });
-});
+}); */
 
 
 
