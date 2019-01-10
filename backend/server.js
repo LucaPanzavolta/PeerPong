@@ -7,6 +7,7 @@ const { log } = require('./helpers');
 const rooms = {};
 
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.get('/hello', (req, res) => res.send('hello'))
 
 const server = app.listen(4000, function () {
   console.log('listening for requests on port 4000');
