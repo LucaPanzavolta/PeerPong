@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 app.get('/hello', (req, res) => res.send('hello'))
 
 const server = app.listen(PORT, function () {
-  console.log('listening for requests on port 4000');
+  console.log(`listening for requests on port ${PORT}`);
 });
 const io = socket(server);
 

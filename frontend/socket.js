@@ -1,4 +1,4 @@
-const socket = io.connect('ws://192.168.1.116:4000');
+const socket = io.connect(`ws://still-sierra-50256.herokuapp.com:${process.env.port}`);
 socket.on('connect', () => {
   log('socket opened...');
 });
