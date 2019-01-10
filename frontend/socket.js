@@ -1,4 +1,4 @@
-const socket = io.connect(`ws://still-sierra-50256.herokuapp.com:${process.env.port}`);
+const socket = io.connect(`ws://still-sierra-50256.herokuapp.com`);
 socket.on('connect', () => {
   log('socket opened...');
 });
