@@ -1,4 +1,4 @@
-const socket = io.connect(`ws://still-sierra-50256.herokuapp.com`);
+const socket = io.connect(`wss://still-sierra-50256.herokuapp.com`);
 socket.on('connect', () => {
   log('socket opened...');
 });
