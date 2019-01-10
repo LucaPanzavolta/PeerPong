@@ -40,13 +40,13 @@ body {
 
 #canvas-content {
   position: absolute;
-  z-index: 15;
+  z-index: 10;
   border: 2px solid red;
 }
 
 #local-content {
   position: absolute;
-  z-index: 10;
+  z-index: 15;
 }
 
 #local_video {

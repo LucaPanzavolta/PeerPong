@@ -1,8 +1,12 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const socket = require('socket.io');
-const { addSocketToRoom, removeSocketsfromRoom, updateMessagesInRoom } = require('./redis-controller');
+const path = require('path');
+const { addSocketToRoom, removeSocketsfromRoom } = require('./redis-controller');
 const { log } = require('./helpers');
 const rooms = {};
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 const server = app.listen(4000, function () {
   console.log('listening for requests on port 4000');
@@ -30,10 +34,6 @@ io.on('connection', (socket) => {
   socket.on('new-ice-candidate', (candidate) => {
     socket.broadcast.emit('new-ice-candidate', candidate);
   });
-
-  /* socket.on('chat-message', (msg) => {
-    updateMessagesInRoom();
-  }); */
 
   socket.on('disconnect', () => {
     if (connectedToRoom) {

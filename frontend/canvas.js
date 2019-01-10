@@ -1,6 +1,7 @@
 let video = document.getElementById("received_video");
 let ctx = document.getElementById("canvas").getContext('2d');
 let header = document.getElementById("header");
+let isCanvasEnabled = false;
 
 let mouseX, mouseY;
 let isDrawing = false;
@@ -10,10 +11,11 @@ let lastY = 0;
 //if mouse is not down don't do anything
 //if mouse is down draw 
 function draw(e) {
-  if (!isDrawing) return;
+  if (!isDrawing || !isCanvasEnabled) return;
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.strokeStyle = '#ecf0f1';
   ctx.stroke();
   lastX = e.offsetX;
   lastY = e.offsetY;

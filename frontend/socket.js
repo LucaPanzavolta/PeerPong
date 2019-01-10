@@ -1,4 +1,4 @@
-const socket = io.connect('ws://localhost:4000');
+const socket = io.connect('ws://192.168.1.116:4000');
 socket.on('connect', () => {
   log('socket opened...');
 });

@@ -14,10 +14,6 @@ function handleSendButton() {
   socket.emit('chat-message', msg);
 }
 
-function handleShareScreenButton() {
-  askScreenStream();
-}
-
 function createPeerConnection() {
   log("Setting up a connection...");
 
@@ -116,11 +112,9 @@ function handleICEConnectionStateChangeEvent(event) {
 
 function handleSignalingStateChangeEvent(event) {
   log("*** WebRTC signaling state changed to: " + myPeerConnection.signalingState);
-  /* switch (myPeerConnection.signalingState) {
-    case "closed":
-      closeVideoCall();
-      break;
-  } */
+  if (myPeerConnection.signalingState === 'closed') {
+    closeVideoCall();
+  }
 }
 
 function handleICEGatheringStateChangeEvent(event) {
@@ -128,8 +122,8 @@ function handleICEGatheringStateChangeEvent(event) {
 }
 
 function closeVideoCall() {
-  var remoteVideo = document.getElementById("received_video");
-  var localVideo = document.getElementById("local_video");
+  let remoteVideo = document.getElementById("received_video");
+  let localVideo = document.getElementById("local_video");
 
   log("Closing the call");
 
@@ -221,7 +215,6 @@ async function handleVideoOfferMsg(sdp) {
   }
 }
 
-
 function handleVideoAnswerMsg(sdp) {
   log("Call recipient has accepted our call");
   var desc = new RTCSessionDescription(sdp);
@@ -250,10 +243,6 @@ function handleGetUserMediaError(e) {
       alert("Error opening your camera and/or microphone: " + e.message);
       break;
   }
-
-  // Make sure we shut down our end of the RTCPeerConnection so we're
-  // ready to try again.
-
   closeVideoCall();
 }
 

@@ -1,8 +1,17 @@
 //capture stream from canvas
 function askCanvasStream() {
+  //transform canvas from transparent to colored
+  isCanvasEnabled = true;
+
+  ctx.fillStyle = '#2c3e50';
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
   log("Starting to read stream from canvas");
   let canvasStream = ctx.canvas.captureStream(25);
-  video.srcObject = canvasStream;
+  console.log('canvas stream tracks', canvasStream.getTracks());
+
+  let newTrack = canvasStream.getTracks()[0];
+  updateTracksInConnection(newTrack);
 }
 
 //capture camera and mic stream
@@ -36,6 +45,8 @@ async function askCameraStream() {
 //capture screen stream
 async function askScreenStream() {
   try {
+    //if canvas is enabled, disable it first
+
     log("Requesting screen access...");
 
     let stream = await navigator.getDisplayMedia({ video: true });
@@ -49,16 +60,22 @@ async function askScreenStream() {
   };
 }
 
+//updates peer connection adding new video track
+//and removing old video track
+//it needs to know which was the previous video track
+//because removing a track does not update the result of .getSenders()
 async function updateTracksInConnection(newVideoTrack) {
   if (hasAddTrack) {
-    log("-- updating tracks in the RTCPeerConnection");
+    log("-- adding new Screen video track to the RTCPeerConnection");
 
-    await myPeerConnection.addTrack(newVideoTrack);
+    await myPeerConnection.addTrack(newVideoTrack); //mediaStreamTrack object
     //removeTrack function wants an RTCRtpSender
-    /* let senders = myPeerConnection.getSenders();
+    let senders = myPeerConnection.getSenders();
     console.log('rtc senders', senders);
-    let senderToRemove = senders.filter(el => el.track.label.includes('screen'))[0];
+    let senderToRemove = senders.filter(el => el.track.kind === 'video' && !el.track.label.includes('screen'))[0];
     console.log('sender to remove', senderToRemove);
-    await myPeerConnection.removeTrack(senderToRemove); */
+
+    log("-- removing old video track in the RTCPeerConnection");
+    await myPeerConnection.removeTrack(senderToRemove); //RTCRtpSender object
   }
 }

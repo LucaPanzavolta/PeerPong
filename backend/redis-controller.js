@@ -31,12 +31,8 @@ const removeSocketsfromRoom = (room) => {
   log(`Room ${room} deleted.`);
 }
 
-const updateMessagesInRoom = () => {
-  //not implemented yet
-};
 
 module.exports = {
   addSocketToRoom,
   removeSocketsfromRoom,
-  updateMessagesInRoom
 };
