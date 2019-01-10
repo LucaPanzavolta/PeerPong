@@ -2,7 +2,7 @@ let myPeerConnection = null;
 let hasAddTrack = false;
 let cameraStream;
 let screenStream;
-let canvasStream;
+let tracks = 0;
 
 function handleJoinRoomButton() {
   let roomName = document.getElementById('room').value;
@@ -69,6 +69,7 @@ async function handleNegotiationNeededEvent(e) {
 
     //send a video offer to the other peer along with SDP
     socket.emit('video-offer', myPeerConnection.localDescription);
+    console.log('in negotiation needed myPeerConnection.localDescription', myPeerConnection.localDescription);
   } catch (e) {
     reportError(e)
   } finally {
@@ -77,7 +78,10 @@ async function handleNegotiationNeededEvent(e) {
 }
 
 function handleTrackEvent(event) {
+
   log("*** Track event");
+  tracks++;
+  console.log("NUMBER OF TRACKS IS ", tracks);
   document.getElementById("received_video").srcObject = event.streams[0];
 }
 
@@ -123,30 +127,22 @@ function handleICEGatheringStateChangeEvent(event) {
   log("*** ICE gathering state changed to: " + myPeerConnection.iceGatheringState);
 }
 
-function closeVideoCall(andConnection = true) {
+function closeVideoCall() {
   var remoteVideo = document.getElementById("received_video");
   var localVideo = document.getElementById("local_video");
 
   log("Closing the call");
 
-  // Close the RTCPeerConnection
-
   if (myPeerConnection) {
     log("--> Closing the peer connection");
-
-    // Disconnect all our event listeners; we don't want stray events
-    // to interfere with the hangup while it's ongoing.
-
-    myPeerConnection.onaddstream = null;  // For older implementations
-    myPeerConnection.ontrack = null;      // For newer ones
+    myPeerConnection.onaddstream = null;
+    myPeerConnection.ontrack = null;
     myPeerConnection.onremovestream = null;
     myPeerConnection.onnicecandidate = null;
     myPeerConnection.oniceconnectionstatechange = null;
     myPeerConnection.onsignalingstatechange = null;
     myPeerConnection.onicegatheringstatechange = null;
     myPeerConnection.onnotificationneeded = null;
-
-    // Stop the videos
 
     if (remoteVideo.srcObject) {
       remoteVideo.srcObject.getTracks().forEach(track => track.stop());
@@ -159,18 +155,9 @@ function closeVideoCall(andConnection = true) {
     remoteVideo.src = null;
     localVideo.src = null;
 
-    // Close the peer connection
-
-    if (andConnection === true) {
-      myPeerConnection.close();
-      myPeerConnection = null;
-    }
+    myPeerConnection.close();
+    myPeerConnection = null;
   }
-
-  // Disable the hangup button
-
-
-  targetUsername = null;
 }
 
 function handleHangUpMsg(msg) {
@@ -187,44 +174,53 @@ function hangUpCall() {
   });
 }
 
-function handleVideoOfferMsg(sdp) {
-  createPeerConnection();
+async function handleVideoOfferMsg(sdp) {
 
-  var desc = new RTCSessionDescription(sdp);
+  //if connection does not exist ask for camera access that is the default video stream
+  try {
+    if (!myPeerConnection) {
+      createPeerConnection();
+      let desc = new RTCSessionDescription(sdp);
+      await myPeerConnection.setRemoteDescription(desc);
+      log("Setting up the local media stream...");
 
-  myPeerConnection.setRemoteDescription(desc).then(function () {
-    log("Setting up the local media stream...");
-    return navigator.mediaDevices.getUserMedia(mediaConstraints);
-  })
-    .then(function (stream) {
+      let stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: { width: 612, height: 288 }
+      });
       log("-- Local video stream obtained");
-      window.localStream = stream;
-      document.getElementById("local_video").srcObject = localStream;
+      document.getElementById("local_video").srcObject = stream;
 
       if (hasAddTrack) {
         log("-- Adding tracks to the RTCPeerConnection");
-        localStream.getTracks().forEach(track =>
-          myPeerConnection.addTrack(track, localStream)
+        stream.getTracks().forEach(track =>
+          myPeerConnection.addTrack(track, stream)
         );
       } else {
         log("-- Adding stream to the RTCPeerConnection");
-        myPeerConnection.addStream(localStream);
+        myPeerConnection.addStream(stream);
       }
-    })
-    .then(function () {
-      log("------> Creating answer");
-      return myPeerConnection.createAnswer();
-    })
-    .then(function (answer) {
-      log("------> Setting local description after creating answer");
-      return myPeerConnection.setLocalDescription(answer);
-    })
-    .then(function () {
-      socket.emit('video-answer', myPeerConnection.localDescription);
-      log("Sending answer packet back to other peer");
-    })
-    .catch(handleGetUserMediaError);
+    } else {
+      let newDesc = new RTCSessionDescription(sdp);
+      await myPeerConnection.setRemoteDescription(newDesc);
+    }
+
+    log("------> Creating answer");
+
+    let answer = await myPeerConnection.createAnswer();
+    await myPeerConnection.setLocalDescription(answer);
+    log("------> Setting local description after creating answer");
+
+    socket.emit('video-answer', myPeerConnection.localDescription);
+    log("Sending answer packet back to other peer");
+  } catch (err) {
+    console.log(err);
+    handleGetUserMediaError(err);
+  } finally {
+    myPeerConnection._negotiating = false;
+  }
 }
+
 
 function handleVideoAnswerMsg(sdp) {
   log("Call recipient has accepted our call");

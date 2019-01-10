@@ -20,11 +20,16 @@ function draw(e) {
 }
 
 //set canvas size dinamically to the same width and length
-//of the received video
+//of the received video when user resizes a page and at the very beginning
 window.addEventListener('resize', () => {
   ctx.canvas.width = video.clientWidth;
   ctx.canvas.height = video.clientHeight;
 });
+
+window.onload = () => {
+  ctx.canvas.width = video.clientWidth;
+  ctx.canvas.height = video.clientHeight;
+};
 
 //invoke draw function when user is moving mouse on top of the canvas
 ctx.canvas.addEventListener('mousemove', draw);

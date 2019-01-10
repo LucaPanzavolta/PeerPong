@@ -1,5 +1,5 @@
 const Model = require('./model');
-const { log } = require('./helpers');
+const { log } = require('../helpers');
 
 const updateRoomsStatus = async (roomName, socket) => {
 

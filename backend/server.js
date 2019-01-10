@@ -1,6 +1,6 @@
 const app = require('express')();
 const socket = require('socket.io');
-const { updateRoomsStatus, updateMessagesInRoom } = require('./controller');
+const { addSocketToRoom, removeSocketsfromRoom, updateMessagesInRoom } = require('./redis-controller');
 const { log } = require('./helpers');
 const rooms = {};
 
@@ -12,10 +12,11 @@ const io = socket(server);
 io.on('connection', (socket) => {
   let connectedToRoom = null;
   log('made socket connection', socket.id);
-  log('active connections', Object.keys(io.sockets.sockets));
+  log('active connections at present', Object.keys(io.sockets.sockets));
 
   socket.on('join-room', (roomName) => {
-    updateRoomsStatus(roomName, socket);
+    let response = addSocketToRoom(roomName, socket);
+    if (response) connectedToRoom = roomName;
   });
 
   socket.on('video-offer', (sdp) => {
@@ -30,17 +31,16 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('new-ice-candidate', candidate);
   });
 
-  socket.on('chat-message', (msg) => {
+  /* socket.on('chat-message', (msg) => {
     updateMessagesInRoom();
-  });
+  }); */
 
   socket.on('disconnect', () => {
     if (connectedToRoom) {
-      rooms[connectedToRoom] = rooms[connectedToRoom].filter(el => el !== socket.id);
+      removeSocketsfromRoom(connectedToRoom);
     }
     log('socket disconnected', socket.id);
     log('active connnections', Object.keys(io.sockets.sockets));
-    log('State of the rooms at present', rooms);
   });
 });
 

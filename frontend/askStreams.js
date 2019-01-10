@@ -1,10 +1,3 @@
-let mediaConstraints = {
-  audio: true,
-  video: true
-};
-
-let screenShareConstraints = { video: true };
-
 //capture stream from canvas
 function askCanvasStream() {
   log("Starting to read stream from canvas");
@@ -13,72 +6,59 @@ function askCanvasStream() {
 }
 
 //capture camera and mic stream
-function askLocalStream() {
-  log("Requesting webcam access...");
+async function askCameraStream() {
+  try {
+    log("Requesting webcam access...");
 
-  navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: { width: 612, height: 288 }
-  })
-    .then(function (localStream) {
-      log("-- Local camera stream obtained");
-      window.banana = localStream;
-      console.log('window object', window);
-      document.getElementById("local_video").srcObject = localStream;
-      if (hasAddTrack) {
-        log("-- Adding tracks to the RTCPeerConnection");
-        localStream.getTracks().forEach(track => {
-          log('im a track');
-          myPeerConnection.addTrack(track, localStream)
-        });
-      } else {
-        log("-- Adding stream to the RTCPeerConnection");
-        myPeerConnection.addStream(localStream);
-      }
-    })
-    .catch(handleGetUserMediaError);
+    let stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: { width: 612, height: 288 }       //16:9 ???
+    });
+
+    log("-- Local camera stream obtained");
+    document.getElementById("local_video").srcObject = stream;
+
+    if (hasAddTrack) {
+      log("-- Adding tracks to the RTCPeerConnection");
+      stream.getTracks().forEach(track => {
+        log('im a track');
+        myPeerConnection.addTrack(track, stream)
+      });
+    } else {
+      log("-- Adding stream to the RTCPeerConnection");
+      myPeerConnection.addStream(stream);
+    }
+  } catch (err) {
+    handleGetUserMediaError(err);
+  }
 }
 
 //capture screen stream
-function askScreenStream() {
-  log("Requesting screen access...");
+async function askScreenStream() {
+  try {
+    log("Requesting screen access...");
 
-  //stop video track in the peer connection
-  console.log('window object', window);
-  /* let videoTrack = window.cameraStream.getVideoTracks()[0];
-  myPeerConnection.removeTrack(videoTrack, window.cameraStream);
-  window.cameraStream = null;
-  log('video track removed'); */
+    let stream = await navigator.getDisplayMedia({ video: true });
+    log("-- Local video screen stream obtained");
+    document.getElementById("local_video").srcObject = stream;
 
-  navigator.getDisplayMedia(screenShareConstraints)
-    .then(localStream => {
-      log("-- Local video screen stream obtained");
-      console.log('window object', window);
-      //window.screenStream = localStream;
-      //console.log('tracks in screen stream', localStream.getTracks().length, localStream.getTracks());
-      //updateTracksInConnection();
-
-      document.getElementById("local_video").srcObject = localStream;
-
-
-    })
-    .catch(handleGetUserMediaError);
+    let newVideoTrack = stream.getTracks()[0];
+    updateTracksInConnection(newVideoTrack);
+  } catch (err) {
+    handleGetUserMediaError(err);
+  };
 }
 
-function updateTracksInConnection(newVideoTrack) {
+async function updateTracksInConnection(newVideoTrack) {
   if (hasAddTrack) {
-    log("-- Adding track to the RTCPeerConnection");
-    localStream.getTracks().forEach(track => {
-      console.log('im a track', track);
-      myPeerConnection.addTrack(track, localStream)
-    });
-  } else {
-    log("-- Adding stream to the RTCPeerConnection");
-    myPeerConnection.addStream(localStream);
+    log("-- updating tracks in the RTCPeerConnection");
+
+    await myPeerConnection.addTrack(newVideoTrack);
+    //removeTrack function wants an RTCRtpSender
+    /* let senders = myPeerConnection.getSenders();
+    console.log('rtc senders', senders);
+    let senderToRemove = senders.filter(el => el.track.label.includes('screen'))[0];
+    console.log('sender to remove', senderToRemove);
+    await myPeerConnection.removeTrack(senderToRemove); */
   }
-  //add new video track to connection
-  myPeerConnection.addTrack()
-  console.log('screen stream video track', screenStream.getVideoTracks()[0], screenStream.getVideoTracks().length);
-  //myPeerConnection.addTrack(window.screenStream)
-  //add screen stream to peer connection
 }

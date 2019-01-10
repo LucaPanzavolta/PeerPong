@@ -11,7 +11,7 @@ socket.on('join-room', (msg) => {
     case 'ready-for-videocall':
       log(msg);
       createPeerConnection();
-      askLocalStream();
+      askCameraStream();
       break;
     case 'too-many-people':
       log(msg);
