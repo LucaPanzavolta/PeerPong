@@ -5,11 +5,12 @@ const path = require('path');
 /* const { addSocketToRoom, removeSocketsfromRoom } = require('./redis-controller');
  */const { log } = require('./helpers');
 const rooms = {};
+const PORT = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.get('/hello', (req, res) => res.send('hello'))
 
-const server = app.listen(4000, function () {
+const server = app.listen(PORT, function () {
   console.log('listening for requests on port 4000');
 });
 /* const io = socket(server);
