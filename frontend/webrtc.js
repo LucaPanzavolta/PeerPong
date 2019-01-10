@@ -17,7 +17,16 @@ function handleSendButton() {
 function createPeerConnection() {
   log("Setting up a connection...");
 
-  myPeerConnection = new RTCPeerConnection();
+  myPeerConnection = new RTCPeerConnection({
+    iceServers: [     // Information about ICE servers - Use your own!
+      {
+        urls: 'turn:numb.viagenie.ca',
+        username: 'webrtc@live.com',
+        credential: 'muazkh'
+      }
+    ]
+  });
+
   hasAddTrack = (myPeerConnection.addTrack !== undefined);
 
   myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
