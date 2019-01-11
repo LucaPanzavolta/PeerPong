@@ -18,7 +18,7 @@ function createPeerConnection() {
   log("Setting up a connection...");
 
   myPeerConnection = new RTCPeerConnection({
-    iceServers: [     // Information about ICE servers - Use your own!
+    iceServers: [
       {
         urls: 'turn:numb.viagenie.ca',
         username: 'webrtc@live.com',
