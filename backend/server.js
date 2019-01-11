@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const socket = require('socket.io');
 const path = require('path');
-const { addSocketToRoom, removeSocketsfromRoom } = require('./redis-controller');
+const { addSocketToRoom, removeSocketsfromRoom, getOtherSocketInRoom } = require('./redis-controller');
 const { log } = require('./helpers');
 const rooms = {};
 const PORT = process.env.PORT;
@@ -26,7 +26,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('video-offer', (sdp) => {
-    socket.broadcast.emit('video-offer', sdp);
+    //send the video-offer message only to the other socket in the room
+    let otherSocketId = getOtherSocketInRoom(connectedToRoom, socket);
+    //socket.broadcast.emit('video-offer', sdp);
+    socket.to(otherSocketId).emit('video-offer', sdp);
   });
 
   socket.on('video-answer', (sdp) => {
@@ -40,6 +43,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (connectedToRoom) {
       removeSocketsfromRoom(connectedToRoom);
+      connectedToRoom = null;
     }
     log('socket disconnected', socket.id);
     log('active connnections', Object.keys(io.sockets.sockets));

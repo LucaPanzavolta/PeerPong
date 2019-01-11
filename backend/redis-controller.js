@@ -31,8 +31,23 @@ const removeSocketsfromRoom = (room) => {
   log(`Room ${room} deleted.`);
 }
 
+const getOtherSocketInRoom = async (room, socket) => {
+  let retrieved = await new Promise((resolve, reject) => {
+    redis.get(room, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+
+  if (!retrieved) return null;
+  let otherSocketInRoom = retrieved.split(':').filter(el => el !== socket.id)[0];
+  console.log('other socket in room', otherSocketInRoom);
+  return otherSocketInRoom;
+};
+
 
 module.exports = {
   addSocketToRoom,
   removeSocketsfromRoom,
+  getOtherSocketInRoom
 };
