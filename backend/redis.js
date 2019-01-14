@@ -1,5 +1,7 @@
+const dotenv = require('dotenv').config({ path: '/home/cervante/Desktop/webrtc-solo-project/variables.env' });
 const { log } = require('./helpers');
 const redisDB = require('redis');
+
 const redis = redisDB.createClient(process.env.REDIS_URL);
 
 redis.on('connect', () => {

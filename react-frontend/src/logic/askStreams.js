@@ -1,12 +1,10 @@
 import log from './helpers';
-import { onMouseDown } from '../logic/canvas';
 import { myPeerConnection, hasAddTrack, handleGetUserMediaError } from './webrtc';
 
 //capture stream from canvas
 export function askCanvasStream() {
   //transform canvas from transparent to colored
   let ctx = document.getElementById("canvas").getContext("2d");
-  ctx.canvas.addEventListener('mousedown', onMouseDown);
 
   ctx.fillStyle = '#2c3e50';
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -23,8 +21,6 @@ export function askCanvasStream() {
 export async function askCameraStream(hasAddTrack = true) {
   try {
     //if canvas is enabled, disable it first
-    let ctx = document.getElementById("canvas").getContext("2d");
-    ctx.canvas.removeEventListener("mousedown", onMouseDown);
 
     log("Requesting webcam access...");
 
@@ -55,8 +51,6 @@ export async function askCameraStream(hasAddTrack = true) {
 export async function askScreenStream() {
   try {
     //if canvas is enabled, disable it first
-    let ctx = document.getElementById("canvas").getContext("2d");
-    ctx.canvas.removeEventListener("mousedown", onMouseDown);
 
     log("Requesting screen access...");
 
@@ -75,7 +69,7 @@ export async function askScreenStream() {
 //and removing old video track
 //it needs to know which was the previous video track
 //because removing a track does not update the result of .getSenders()
-export async function updateTracksInConnection(newVideoTrack) {
+async function updateTracksInConnection(newVideoTrack) {
   if (hasAddTrack) {
     log("-- adding new Screen video track to the RTCPeerConnection");
 

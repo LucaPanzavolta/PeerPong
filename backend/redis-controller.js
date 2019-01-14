@@ -41,7 +41,6 @@ const getOtherSocketInRoom = async (room, socket) => {
 
   if (!retrieved) return null;
   let otherSocketInRoom = retrieved.split(':').filter(el => el !== socket.id)[0];
-  console.log('other socket in room', otherSocketInRoom);
   return otherSocketInRoom;
 };
 

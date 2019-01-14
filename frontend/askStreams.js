@@ -1,5 +1,5 @@
 //capture stream from canvas
-function askCanvasStream() {
+export function askCanvasStream() {
   //transform canvas from transparent to colored
   isCanvasEnabled = true;
 
@@ -15,7 +15,7 @@ function askCanvasStream() {
 }
 
 //capture camera and mic stream
-async function askCameraStream() {
+export async function askCameraStream() {
   try {
     log("Requesting webcam access...");
 
@@ -43,7 +43,7 @@ async function askCameraStream() {
 }
 
 //capture screen stream
-async function askScreenStream() {
+export async function askScreenStream() {
   try {
     //if canvas is enabled, disable it first
 

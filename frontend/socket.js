@@ -1,4 +1,7 @@
-const socket = io.connect(`wss://still-sierra-50256.herokuapp.com`);
+const hostname = window.location.host;
+//const socket = io.connect(`wss://still-sierra-50256.herokuapp.com`);
+const socket = io.connect(`ws://${hostname}`);
+
 socket.on('connect', () => {
   log('socket opened...');
 });

@@ -27,7 +27,7 @@ function createDataChannel(myPeerConnection) {
   }
 }
 
-export function createPeerConnection(bool) {
+export function createPeerConnection() {
   log("Setting up a connection...");
 
   myPeerConnection = new RTCPeerConnection({
@@ -39,11 +39,6 @@ export function createPeerConnection(bool) {
       }
     ]
   });
-
-  //EXPERIMENT
-  if (bool) createDataChannel(myPeerConnection);
-
-  //EXPERIMENT
 
   hasAddTrack = (myPeerConnection.addTrack !== undefined);
 
@@ -76,6 +71,7 @@ export async function handleNegotiationNeededEvent(e) {
   try {
     log("---> Creating offer");
     const offer = await myPeerConnection.createOffer();
+    console.log('im the offer', offer)
 
     log("---> Creating new description object to send to remote peer");
     await myPeerConnection.setLocalDescription(offer);

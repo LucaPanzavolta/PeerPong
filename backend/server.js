@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: '/home/cervante/Desktop/webrtc-solo-project/variables.env' });
 const express = require('express');
 const app = express();
 const socket = require('socket.io');
@@ -8,7 +9,6 @@ const rooms = {};
 const PORT = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, '../frontend')));
-app.get('/hello', (req, res) => res.send('hello'))
 
 const server = app.listen(PORT, function () {
   console.log(`listening for requests on port ${PORT}`);
@@ -25,19 +25,26 @@ io.on('connection', (socket) => {
     if (response) connectedToRoom = roomName;
   });
 
-  socket.on('video-offer', (sdp) => {
-    //send the video-offer message only to the other socket in the room
-    let otherSocketId = getOtherSocketInRoom(connectedToRoom, socket);
-    //socket.broadcast.emit('video-offer', sdp);
+  socket.on('video-offer', async (sdp) => {
+    let otherSocketId = await getOtherSocketInRoom(connectedToRoom, socket);
+    console.log('other socket in video offer', otherSocketId);
     socket.to(otherSocketId).emit('video-offer', sdp);
+
+    //socket.broadcast.emit('video-offer', sdp);
   });
 
-  socket.on('video-answer', (sdp) => {
-    socket.broadcast.emit('video-answer', sdp);
+  socket.on('video-answer', async (sdp) => {
+    let otherSocketId = await getOtherSocketInRoom(connectedToRoom, socket);
+    socket.to(otherSocketId).emit('video-answer', sdp);
+
+    //socket.broadcast.emit('video-answer', sdp);
   });
 
-  socket.on('new-ice-candidate', (candidate) => {
-    socket.broadcast.emit('new-ice-candidate', candidate);
+  socket.on('new-ice-candidate', async (candidate) => {
+    let otherSocketId = await getOtherSocketInRoom(connectedToRoom, socket);
+    socket.to(otherSocketId).emit('new-ice-candidate', candidate);
+
+    //socket.broadcast.emit('new-ice-candidate', candidate);
   });
 
   socket.on('disconnect', () => {
