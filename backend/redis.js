@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config({ path: '/home/cervante/Desktop/webrtc-solo-project/variables.env' });
+//const dotenv = require('dotenv').config({ path: '/home/cervante/Desktop/webrtc-solo-project/variables.env' });
 const { log } = require('./helpers');
 const redisDB = require('redis');
 
