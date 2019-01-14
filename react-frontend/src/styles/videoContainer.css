@@ -1,0 +1,36 @@
+#video-container {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+  height: 100%;
+}
+
+#received-content {
+  flex: 3;
+  height: 100%;
+  z-index: 5;
+}
+
+#received-video {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+#canvas-content {
+  position: absolute;
+  z-index: 10;
+}
+
+#local-content {
+  position: absolute;
+  z-index: 15;
+}
+
+#local-video {
+  margin-top: 10px;
+  margin-left: 10px;
+  height: 150px;
+  object-fit: contain;
+  border: 5px solid #ecf0f1;
+}

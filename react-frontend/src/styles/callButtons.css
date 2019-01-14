@@ -1,0 +1,25 @@
+div#call-buttons {
+  display: flex;
+  width: 300px;
+  justify-content: space-between;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  z-index: 20;
+}
+
+div.round-bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 3px solid #ecf0f1;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+}
+
+img.call-buttons {
+  width: 2rem;
+  height: 2rem;
+}
