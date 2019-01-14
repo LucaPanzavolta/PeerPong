@@ -32,7 +32,6 @@ export function createPeerConnection() {
 
   myPeerConnection = new RTCPeerConnection({
     iceServers: [
-      { urls: 'stun:stun.voipzoom.com:3478' },
       { urls: 'stun:stun.l.google.com:19302' },
       {
         urls: 'turn:numb.viagenie.ca',
