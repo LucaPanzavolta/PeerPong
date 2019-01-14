@@ -4,7 +4,7 @@ import { askCameraStream } from './askStreams';
 import log from './helpers';
 
 //const hostname = window.location.hostname; //change it back to window.location.hosti
-const socket = io.connect(`wss://codeworks-solo-project.herokuapp.com/`);
+const socket = io.connect(`wss://https://codeworks-solo-project.herokuapp.com/`);
 
 socket.on('connect', () => {
   log('socket opened...');
