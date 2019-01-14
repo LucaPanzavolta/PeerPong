@@ -8,6 +8,7 @@ const { log } = require('./helpers');
 const PORT = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, '../react-frontend/build/')));
+console.log('This is the path im serving', path.join(__dirname, '../react-frontend/build/'));
 
 const server = app.listen(PORT, function () {
   console.log(`listening for requests on port ${PORT}`);
