@@ -11,7 +11,7 @@ export function handleJoinRoomButton() {
   //socket.emit('join-room', roomName);
 }
 
-function createDataChannel(myPeerConnection) {
+/* function createDataChannel(myPeerConnection) {
   log('Creating data channel...');
 
   let dataChannel = myPeerConnection.createDataChannel('luca');
@@ -25,13 +25,15 @@ function createDataChannel(myPeerConnection) {
     console.log('data channel on message');
     console.log('HO LETTO' + event.data);
   }
-}
+} */
 
 export function createPeerConnection() {
   log("Setting up a connection...");
 
   myPeerConnection = new RTCPeerConnection({
     iceServers: [
+      { urls: 'stun.voipzoom.com:3478' },
+      { urls: 'stun:stun.l.google.com:19302' },
       {
         urls: 'turn:numb.viagenie.ca',
         username: 'webrtc@live.com',
@@ -50,7 +52,7 @@ export function createPeerConnection() {
   myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
 
   //data channel event handlers
-  myPeerConnection.ondatachannel = handleReceiveDataChannel;
+  //myPeerConnection.ondatachannel = handleReceiveDataChannel;
 
   if (hasAddTrack) {
     myPeerConnection.ontrack = handleTrackEvent;
@@ -263,12 +265,12 @@ export function reportError(errMessage) {
   log_error("Error " + errMessage.name + ": " + errMessage.message);
 }
 
-function handleReceiveDataChannel(event) {
+/* function handleReceiveDataChannel(event) {
   console.log('DATA CHANNEL OPEN!');
 
   let receiveChannel = event.channel;
   receiveChannel.onopen = function () { console.log('receive channel on open') };
   receiveChannel.onclose = function () { console.log('receive channel on close') };
   receiveChannel.send('TU PUZZI!!!!!!!!!!!!!!');
-}
+} */
 
