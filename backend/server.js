@@ -18,8 +18,6 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-console.log('This is the path im serving', path.join(__dirname, '../react-frontend/build'));
-
 const server = app.listen(PORT, function () {
   console.log(`listening for requests on port ${PORT}`);
 });
