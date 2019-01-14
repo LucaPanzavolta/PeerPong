@@ -7,8 +7,16 @@ const { addSocketToRoom, removeSocketsfromRoom, getOtherSocketInRoom } = require
 const { log } = require('./helpers');
 const PORT = process.env.PORT;
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../react-frontend/build')));
 //app.use(express.static('../react-frontend/build'));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../react-frontend/build')));
+  //
+  app.get('*', (req, res) => {
+    res.sendfile(path.join(__dirname = '../react-frontend/build/index.html'));
+  })
+}
 
 console.log('This is the path im serving', path.join(__dirname, '../react-frontend/build'));
 
