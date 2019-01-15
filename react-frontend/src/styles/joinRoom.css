@@ -36,8 +36,12 @@ input#room-name:focus {
   border-bottom: 3px solid #2ecc71 ;
 } 
 
+#button-container {
+  width:60%;
+}
+
 button#join {
-  width: 60%;
+  width: 100%;
   border: 3px solid #ecf0f1;
   color: #353b48;
   padding: 12px 0;

@@ -9,12 +9,14 @@ import '../styles/videoContainer.css';
 class VideoContainer extends Component {
   render() {
     return (
-      <div id="video-container">
-        <ReceivedVideo />
-        <LocalVideo />
-        <Canvas />
+      <div id="content-container">
+        <div id="video-container">
+          <ReceivedVideo />
+          <LocalVideo />
+          <Canvas />
+          <CallButtons />
+        </div>
         <Toolbar />
-        <CallButtons />
       </div>
     );
   }

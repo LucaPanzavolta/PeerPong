@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import placeholder from '../assets/avatar/placeholder.png';
 
 class LocalVideo extends Component {
   render() {

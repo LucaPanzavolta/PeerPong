@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { selectFile, sendFileToPeer } from '../logic/dataChannel';
-import icon1 from '../assets/icons/001-conference.svg';
-import icon2 from '../assets/icons/010-mail.svg';
-import icon3 from '../assets/icons/013-videocall-1.svg';
-import icon4 from '../assets/icons/024-megaphone.svg';
+import folder from '../assets/icons/folder.svg';
+import chat from '../assets/icons/chat.svg';
+import calendar from '../assets/icons/calendar.svg';
+import download from '../assets/icons/download.svg';
 
+import settings from '../assets/icons/settings.svg';
+import exit from '../assets/icons/exit.svg';
 import '../styles/toolbar.css';
 
 class Toolbar extends Component {
@@ -12,18 +14,36 @@ class Toolbar extends Component {
   render() {
     return (
       <div id="toolbar">
+        <div>
+          <input
+            type="file"
+            id="file-input"
+            onChange={sendFileToPeer}
+            style={{ display: 'none' }}>
+          </input>
+          <div className="bg-icons">
+            <img className="icons" src={folder} alt="folder-icon" onClick={selectFile} />
+          </div>
+          <div className="bg-icons">
+            <img className="icons" src={chat} alt="chat-icon" />
+          </div>
+          <div className="bg-icons">
+            <img className="icons" src={calendar} alt="calendar-icon" />
+          </div>
+          <div className="bg-icons">
+            <img className="icons" src={download} alt="download-icon" />
+          </div>
+        </div>
 
-        <input
-          type="file"
-          id="file-input"
-          onChange={sendFileToPeer}
-          style={{ display: 'none' }}>
-        </input>
+        <div>
+          <div className="bg-icons">
+            <img className="icons" src={settings} alt="settings-icon" />
+          </div>
+          <div className="bg-icons">
+            <img className="icons" src={exit} alt="exit-icon" />
+          </div>
 
-        <img className="icons" src={icon1} alt="icon1" onClick={selectFile} />
-        <img className="icons" src={icon2} alt="icon2" />
-        <img className="icons" src={icon3} alt="icon3" />
-        <img className="icons" src={icon4} alt="icon4" />
+        </div>
       </div >
     );
   }

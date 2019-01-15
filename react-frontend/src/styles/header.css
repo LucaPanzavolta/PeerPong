@@ -14,6 +14,21 @@ h1 {
   font-size: 45px;
 }
 
+div#status {
+  font-style: italic;
+}
+
+div#status-ball {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+div#status-ball.green-ball {
+  background-color: green;
+}
+
 p#username {
   display: inline-block;
   font-family: 'Poppins', sans-serif;

@@ -20,7 +20,7 @@ class CallButtons extends Component {
           <img className="call-buttons" src={blackboardIcon} alt="Share notes on a blackboard icon" />
         </div>
 
-        <div className="round-bg" onClick={closeVideoCall}>
+        <div id="bg-close-call" className="round-bg" onClick={closeVideoCall}>
           <img className="call-buttons" src={closeCallIcon} alt="Close current call icon" />
         </div>
 

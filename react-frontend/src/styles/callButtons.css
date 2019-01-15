@@ -5,6 +5,7 @@ div#call-buttons {
   position: absolute;
   top: 90%;
   left: 50%;
+  transform: translate(-50%, 0);
   z-index: 20;
 }
 
@@ -17,6 +18,15 @@ div.round-bg {
   border-radius: 50%;
   width: 70px;
   height: 70px;
+}
+
+div.round-bg:hover {
+  border: 3px solid #78e08f;
+  transform: scale(1.2);
+}
+div#bg-close-call:hover {
+  border: 3px solid #e55039;
+  transform: scale(1.1);
 }
 
 img.call-buttons {

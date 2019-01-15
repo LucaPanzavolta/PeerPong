@@ -30,7 +30,7 @@ export function handleCanvas() {
   let video = document.getElementById("received-video");
   
   ctx.canvas.width = video.clientWidth;
-  ctx.canvas.height = video.clientHeight;
+  ctx.canvas.height = video.clientHeight - 10;
   
   //invoke draw function when user is moving mouse on top of the canvas
   ctx.canvas.addEventListener('mousemove', draw);

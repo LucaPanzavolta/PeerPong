@@ -19,7 +19,7 @@ class JoinRoom extends Component {
         <div id="join-room-form">
           <img id="profile-photo" src={avatar} alt="avatar" />
           <input id="room-name" type="text" placeholder="Which room do you wanna join?" required></input>
-          <Link to="/videochat">
+          <Link to="/videochat" id="button-container">
             <button id="join" onClick={this.readInputField}>Join room</button>
           </Link>
         </div>
