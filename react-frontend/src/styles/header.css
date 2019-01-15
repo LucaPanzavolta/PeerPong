@@ -16,17 +16,20 @@ h1 {
 
 div#status {
   font-style: italic;
+  display: flex;
+  align-items: flex-end;
 }
 
 div#status-ball {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: red;
+  background-color: #e55039;
+  margin-right: 20px;
 }
 
 div#status-ball.green-ball {
-  background-color: green;
+  background-color: #78e08f;
 }
 
 p#username {
