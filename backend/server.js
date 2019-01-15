@@ -8,15 +8,15 @@ const { log } = require('./helpers');
 const PORT = process.env.PORT;
 
 app.use(express.static(path.join(__dirname, '../react-frontend/build')));
-//app.use(express.static('../react-frontend/build'));
+app.use(express.static('../react-frontend/build'));
 
-/* if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../react-frontend/build')));
   //
   app.get('*', (req, res) => {
     res.sendfile(path.join(__dirname = '../react-frontend/build/index.html'));
   })
-} */
+}
 
 const server = app.listen(PORT, function () {
   console.log(`listening for requests on port ${PORT}`);
