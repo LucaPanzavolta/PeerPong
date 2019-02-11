@@ -3,8 +3,11 @@ import { createPeerConnection, handleVideoOfferMsg, handleVideoAnswerMsg, handle
 import { askCameraStream } from './askStreams';
 import log from './helpers';
 
-//const hostname = window.location.hostname; //change it back to window.location.hosti
-const socket = io.connect(`wss://codeworks-project.herokuapp.com/`);
+const hostname = window.location.host; //change it back to window.location.host
+/* const socket = io.connect(`wss://codeworks-project.herokuapp.com/`);
+ */
+
+const socket = io.connect(`ws://localhost:4000`);
 
 socket.on('connect', () => {
   log('socket opened...');

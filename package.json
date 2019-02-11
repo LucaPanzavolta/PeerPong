@@ -2,12 +2,12 @@
   "name": "webrtc-solo-project",
   "version": "0.0.1",
   "description": "A client/server application that allows two peers to communicate through real-time video exchange.",
-  "license": "BSD",
+  "license": "MIT",
   "author": "Luca Panzavolta",
   "main": "./backend/server.js",
   "scripts": {
     "postinstall": "cp node_modules/webrtc-adapter/out/adapter.js .",
-    "start": "cd react-frontend && npm run build && node ../backend/server.js"
+    "start": "node ./backend/server.js"
   },
   "dependencies": {
     "dotenv": "^6.2.0",
